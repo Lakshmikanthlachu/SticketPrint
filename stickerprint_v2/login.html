@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login / Register | Stikko</title>
+<meta name="description" content="Log in or create a Stikko account to track orders and manage your print production.">
+<meta name="theme-color" content="#4B39EF">
+<meta property="og:title" content="Login / Register | Stikko">
+<meta property="og:description" content="Log in or create a Stikko account to track orders and manage your print production.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%234B39EF'/%3E%3Cstop offset='1' stop-color='%23FF5A3C'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Cpath d='M40 0 L64 24 L64 0 Z' fill='white' fill-opacity='.35'/%3E%3Ctext x='32' y='42' font-size='30' font-family='Georgia,serif' font-weight='700' fill='white' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+
+
+</head>
+<body dir="ltr">
+<div class="page-loader"><div class="loader-mark"></div></div>
+
+<section class="auth-shell">
+  <div class="auth-visual">
+    <div class="mesh-bg"><span class="mesh-blob" style="width:420px;height:420px;top:10%;inset-inline-start:-10%;background:var(--primary);"></span>
+    <span class="mesh-blob" style="width:340px;height:340px;bottom:5%;inset-inline-end:-8%;background:var(--accent);animation-delay:-6s;"></span></div>
+    <div class="reveal in" style="position:relative;max-width:420px;color:#fff;">
+      <span class="badge" style="background:rgba(255,255,255,.14);color:#fff;">Stikko Accounts</span>
+      <h2 class="mt-md" style="color:#fff;">Track orders, save designs &amp; reorder in one click.</h2>
+      <p class="mt-sm" style="color:rgba(255,255,255,.75);">Join 8,500+ brands managing their print production from one dashboard.</p>
+      <div class="grid gap-sm mt-lg">
+        <div class="flex items-center gap-sm"><span class="card-icon" style="background:rgba(255,255,255,.14);color:#fff;margin:0;"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9"/></svg></span><span style="color:#fff;font-size:.9rem;">Reorder past designs instantly</span></div><div class="flex items-center gap-sm"><span class="card-icon" style="background:rgba(255,255,255,.14);color:#fff;margin:0;"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.2 8.3-7 10-3.8-1.7-7-5-7-10V6l7-3z"/><path d="M9 12l2 2 4-4.5"/></svg></span><span style="color:#fff;font-size:.9rem;">Track live production &amp; shipping</span></div><div class="flex items-center gap-sm"><span class="card-icon" style="background:rgba(255,255,255,.14);color:#fff;margin:0;"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"/></svg></span><span style="color:#fff;font-size:.9rem;">Save materials &amp; billing preferences</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="auth-form-side">
+    <div class="auth-toolbar">
+      <button class="icon-btn" data-dir-toggle title="Toggle RTL / LTR"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h12M11 4l4 3-4 3"/><path d="M21 17H9M13 14l-4 3 4 3"/></svg></button>
+      <button class="icon-btn" data-theme-toggle title="Toggle dark mode"><span class="moon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg></span><span class="sun"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg></span></button>
+    </div>
+    <div class="auth-box reveal in">
+      <a href="index.html" class="brand mb-lg" style="justify-content:center;">
+        <span class="brand-mark" style="width:44px;height:44px;"><span class="flip-inner"><span class="flip-face flip-front"><svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7.5 8.2c0-2.4 2.1-4.2 4.9-4.2s4.7 1.5 4.9 3.6" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M7.3 16.4c.2 2.1 2.2 3.6 4.9 3.6s4.9-1.8 4.9-4.2c0-4.1-9.8-3.7-9.8-7.9" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span><span class="flip-face flip-back">Sk</span></span></span> <span class="brand-word">Stikko</span>
+      </a>
+      <div class="flex-between" style="align-items:center;flex-wrap:wrap;gap:10px;">
+        <div class="auth-tabs">
+          <button class="active" data-tab-target="login">Login</button>
+          <button data-tab-target="register">Register</button>
+        </div>
+        <a href="admin/dashboard.html" class="admin-quick-link"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.2 8.3-7 10-3.8-1.7-7-5-7-10V6l7-3z"/><path d="M9 12l2 2 4-4.5"/></svg> Login as Admin</a>
+      </div>
+      <form data-tab-panel="login" data-demo-form>
+        <div class="grid gap-md">
+          <div class="field"><label>Email</label><input type="email" required placeholder="you@company.com"></div>
+          <div class="field"><label>Password</label>
+            <div style="position:relative;">
+              <input type="password" required id="pw1" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" style="padding-inline-end:46px;">
+              <button type="button" class="icon-btn" data-pw-toggle="#pw1" style="position:absolute;inset-inline-end:4px;top:4px;width:36px;height:36px;background:transparent;"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.8-7 10-7 10 7 10 7-3.8 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></button>
+            </div>
+          </div>
+          <div class="flex-between" style="font-size:.85rem;">
+            <label class="field-check" style="gap:8px;"><input type="checkbox"> Remember me</label>
+            <a href="#" style="color:var(--primary);font-weight:600;">Forgot password?</a>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block btn-lg">Log In <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h16M14 6l6 6-6 6"/></svg></button>
+          <p data-form-note style="font-size:.85rem;text-align:center;"></p>
+        </div>
+      </form>
+      <form data-tab-panel="register" data-demo-form style="display:none;">
+        <div class="grid gap-md">
+          <div class="grid grid-2 gap-md">
+            <div class="field"><label>First Name</label><input type="text" required placeholder="Jordan"></div>
+            <div class="field"><label>Last Name</label><input type="text" required placeholder="Rivera"></div>
+          </div>
+          <div class="field"><label>Email</label><input type="email" required placeholder="you@company.com"></div>
+          <div class="field"><label>Password</label><input type="password" required placeholder="Minimum 8 characters"></div>
+          <div class="field-check"><input type="checkbox" required> I agree to the Terms &amp; Privacy Policy</div>
+          <button type="submit" class="btn btn-primary btn-block btn-lg">Create Account <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h16M14 6l6 6-6 6"/></svg></button>
+          <p data-form-note style="font-size:.85rem;text-align:center;"></p>
+        </div>
+      </form>
+      <div class="flex items-center gap-sm mt-lg"><hr class="divider" style="flex:1;margin:0;"><span style="font-size:.78rem;color:var(--text-faint);">OR</span><hr class="divider" style="flex:1;margin:0;"></div>
+      <div class="grid grid-2 gap-sm mt-md">
+        <button class="btn btn-outline btn-oauth google" type="button"><svg class="icon icon-sm" viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.4-5.9 7.5-11.3 7.5-6.9 0-12.5-5.6-12.5-12.5S17.1 10.5 24 10.5c3.1 0 5.9 1.1 8.1 3l6-6C34.6 3.9 29.6 1.5 24 1.5 11.6 1.5 1.5 11.6 1.5 24S11.6 46.5 24 46.5 46.5 36.4 46.5 24c0-1.2-.1-2.4-.9-3.5z"/><path fill="#FF3D00" d="M4.9 14.6l7.2 5.3C14 15.9 18.6 12.5 24 12.5c3.1 0 5.9 1.1 8.1 3l6-6C34.6 5.9 29.6 3.5 24 3.5c-8.3 0-15.4 4.7-19.1 11.1z"/><path fill="#4CAF50" d="M24 46.5c5.5 0 10.4-1.9 14.2-5.1l-6.6-5.4c-2 1.5-4.6 2.5-7.6 2.5-5.3 0-9.8-3.6-11.4-8.5l-6.9 5.3C9.6 41.7 16.3 46.5 24 46.5z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.1-4.1 5.4l6.6 5.4C41.9 35.5 46.5 30.3 46.5 24c0-1.2-.1-2.4-.9-3.5z"/></svg> Google</button>
+        <button class="btn btn-outline btn-oauth apple" type="button"><svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.7 12.7c0-2.5 2-3.7 2.1-3.8-1.1-1.7-2.9-1.9-3.5-1.9-1.5-.2-2.9.9-3.6.9-.8 0-1.9-.9-3.2-.8-1.6 0-3.1.9-4 2.4-1.7 3-.4 7.4 1.2 9.8.8 1.2 1.8 2.5 3 2.4 1.2-.1 1.7-.8 3.2-.8s1.9.8 3.2.7c1.3 0 2.1-1.2 2.9-2.3.9-1.4 1.3-2.7 1.3-2.8-.1 0-2.6-1-2.6-3.8z"/><path fill="currentColor" d="M14.1 5.3c.7-.8 1.1-1.9 1-3-1 0-2.2.7-2.9 1.5-.6.7-1.2 1.8-1 2.9 1.1.1 2.2-.6 2.9-1.4z"/></svg> Apple</button>
+      </div>
+      <p class="text-center mt-lg" style="font-size:.85rem;"><a href="index.html" class="link-back"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12H4M10 6l-6 6 6 6"/></svg> Back to homepage</a></p>
+    </div>
+  </div>
+</section>
+
+<script src="js/main.js"></script>
+
+</body>
+</html>
