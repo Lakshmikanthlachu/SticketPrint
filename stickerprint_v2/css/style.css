@@ -70,6 +70,7 @@
 }
 
 [data-theme="dark"]{
+  --map-filter: invert(92%) hue-rotate(180deg) brightness(.95) contrast(.9);
   --bg: #0D0B16;
   --bg-alt: #131020;
   --bg-raised: #171325;
@@ -182,6 +183,12 @@ p{ color:var(--text-muted); }
 .btn-primary:hover{ transform: translateY(-3px); box-shadow: 0 20px 40px -10px rgb(75 57 239 / 0.55); }
 .btn-accent{ background: linear-gradient(135deg,var(--accent),var(--accent-600)); color:#fff; box-shadow: var(--shadow-glow-accent); }
 .btn-accent:hover{ transform: translateY(-3px); box-shadow: 0 20px 40px -10px rgb(255 90 60 / 0.55); }
+/* Diagonal light sweep on the two solid-fill button styles — a small,
+   premium-feeling detail on the site's highest-emphasis controls. .btn
+   already has overflow:hidden + isolation:isolate, which is exactly what's
+   needed to clip this to the pill shape without leaking onto neighbors. */
+.btn-primary::before, .btn-accent::before{ content:''; position:absolute; inset:0; background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.35) 50%,transparent 70%); transform:translateX(-120%); transition:transform .7s var(--ease-out); pointer-events:none; }
+.btn-primary:hover::before, .btn-accent:hover::before{ transform:translateX(120%); }
 .btn-outline{ background:transparent; border:1.5px solid var(--border-strong); color:var(--text); }
 .btn-outline:hover{ border-color:var(--primary); color:var(--primary); background:var(--primary-50); }
 .btn-ghost{ background: var(--surface-2); color:var(--text); }
@@ -192,6 +199,8 @@ p{ color:var(--text-muted); }
 .btn-lg{ padding:19px 38px; font-size:1.05rem; }
 .btn-block{ width:100%; }
 .btn-icon{ padding:12px; border-radius:50%; }
+.btn:disabled{ opacity:.45; cursor:not-allowed; pointer-events:none; transform:none !important; box-shadow:none !important; }
+.btn:disabled::before{ display:none; }
 
 /* -------------------------------------------------------------------------
    5. HEADER / NAVIGATION
@@ -249,7 +258,7 @@ p{ color:var(--text-muted); }
 [data-theme="dark"] .icon-btn .moon{ display:none; }
 [data-theme="dark"] .icon-btn .sun{ display:block; }
 [data-dir-toggle] svg{ transition: transform var(--dur-med) var(--ease-out); }
-[data-dir-toggle].is-rtl svg{ transform: scaleX(-1); }
+[dir="rtl"] [data-dir-toggle] svg{ transform: scaleX(-1); }
 .hamburger{ display:none; width:42px; height:42px; border-radius:50%; background:var(--surface-2); align-items:center; justify-content:center; flex-direction:column; gap:4px; }
 .hamburger span{ width:18px; height:2px; background:var(--text); border-radius:2px; transition: all var(--dur-fast) var(--ease-out); }
 .hamburger.active span:nth-child(1){ transform: translateY(6px) rotate(45deg);}
@@ -260,13 +269,35 @@ p{ color:var(--text-muted); }
   .main-nav{ display:none; }
   .hamburger{ display:flex; }
   .header-actions .btn{ display:none; }
-  .header-actions .icon-btn:not([data-theme-toggle]){ display:none; }
+  /* Both utility icon-buttons move into the mobile-nav panel itself on small
+     screens (see .mobile-nav-utils below) so the collapsed header stays to
+     just the brand + hamburger, and every navbar icon is still reachable. */
+  .header-actions .icon-btn{ display:none; }
 }
 
-.mobile-nav{ position:fixed; inset:var(--header-h) 0 0 0; background:var(--bg); z-index:190; padding:28px 24px; overflow-y:auto; transform:translateY(-12px); opacity:0; visibility:hidden; transition: all var(--dur-med) var(--ease-out); }
+/* Full-screen mobile nav panel — utility icons row, then a scrollable link
+   list (each with a leading icon so it doesn't read as bare text), then the
+   auth buttons pinned at the bottom. */
+.mobile-nav{ position:fixed; top:var(--header-h); right:0; bottom:0; left:0; background:var(--bg); z-index:190; padding:20px 20px 28px; overflow-y:auto; transform:translateY(-12px); opacity:0; visibility:hidden; transition: transform var(--dur-med) var(--ease-out), opacity var(--dur-med) var(--ease-out), visibility var(--dur-med); display:flex; flex-direction:column; }
 .mobile-nav.open{ transform:translateY(0); opacity:1; visibility:visible; }
-.mobile-nav a{ display:flex; justify-content:space-between; padding:16px 4px; font-weight:600; font-size:1.05rem; border-bottom:1px solid var(--border); }
-.mobile-nav .btn{ margin-top:24px; }
+
+.mobile-nav-utils{ display:flex; gap:10px; padding-bottom:18px; margin-bottom:14px; border-bottom:1px solid var(--border); }
+.mobile-util-btn{ flex:1; display:flex; align-items:center; justify-content:center; gap:8px; padding:13px 8px; border-radius:var(--radius-md); background:var(--surface-2); font-size:.82rem; font-weight:700; color:var(--text-muted); transition: background var(--dur-fast), color var(--dur-fast); }
+.mobile-util-btn svg{ width:18px; height:18px; flex-shrink:0; }
+.mobile-util-btn:hover, .mobile-util-btn:active{ background:var(--primary-100); color:var(--primary); }
+.mobile-util-btn .sun{ display:none; }
+[data-theme="dark"] .mobile-util-btn .moon{ display:none; }
+[data-theme="dark"] .mobile-util-btn .sun{ display:block; }
+
+.mobile-nav-links{ display:flex; flex-direction:column; }
+.mobile-nav a{ display:flex; align-items:center; justify-content:space-between; gap:12px; padding:14px 6px; font-weight:600; font-size:1.02rem; border-bottom:1px solid var(--border); color:var(--text); transition: color var(--dur-fast); }
+.mobile-nav a:hover, .mobile-nav a:active{ color:var(--primary); }
+.mobile-nav a .nav-link-main{ display:flex; align-items:center; gap:14px; min-width:0; }
+.mobile-nav a .nav-ic{ width:36px; height:36px; border-radius:10px; background:var(--primary-100); color:var(--primary); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.mobile-nav a .nav-ic svg{ width:17px; height:17px; }
+.mobile-nav a > svg{ width:15px; height:15px; color:var(--text-faint); flex-shrink:0; }
+.mobile-nav-auth{ display:flex; flex-direction:column; gap:10px; margin-top:22px; }
+.mobile-nav-auth .btn{ margin-top:0; }
 
 /* -------------------------------------------------------------------------
    6. HERO / BACKDROP FX
@@ -360,9 +391,9 @@ p{ color:var(--text-muted); }
 /* Base avatar circle — every .av span site-wide (testimonials, team, admin
    tables, blog authors) gets a proper circle with a centered illustrated
    silhouette mark, not just a bare color swatch. */
-.av{ display:inline-flex; align-items:center; justify-content:center; border-radius:50%; overflow:hidden; flex-shrink:0; color:#fff; }
+.av{ display:inline-flex; align-items:center; justify-content:center; border-radius:50%; overflow:hidden; flex-shrink:0; color:#fff; background:var(--bg-alt); }
 .av svg{ width:58%; height:58%; opacity:.92; }
-.av img{ width:100%; height:100%; object-fit:cover; display:block; }
+.av img{ width:100%; height:100%; object-fit:cover; display:block; color:transparent; font-size:0; }
 
 .avatar-row{ display:flex; }
 .avatar-row img,.avatar-row .av{ width:38px; height:38px; border-radius:50%; border:3px solid var(--bg); margin-inline-start:-12px; object-fit:cover; }
@@ -379,7 +410,6 @@ p{ color:var(--text-muted); }
 @keyframes spin-slow{ to{ transform:rotate(360deg);} }
 @keyframes bob{ 0%,100%{ transform:translateY(0);} 50%{ transform:translateY(-16px);} }
 @keyframes marquee{ from{ transform:translateX(0);} to{ transform:translateX(-50%);} }
-[dir="rtl"] @keyframes marquee{ from{ transform:translateX(0);} to{ transform:translateX(50%);} }
 @keyframes shimmer{ 0%{ background-position:-200% 0;} 100%{ background-position:200% 0;} }
 
 .spin-slow{ animation:spin-slow 18s linear infinite; }
@@ -400,6 +430,11 @@ p{ color:var(--text-muted); }
 
 .marquee-track{ display:flex; gap:64px; width:max-content; animation: marquee 28s linear infinite; }
 .marquee-row:hover .marquee-track{ animation-play-state:paused; }
+/* The marquee track scrolls toward -50% (visually leftward); mirror that to
+   +50% for RTL layouts by running the same keyframes in reverse rather than
+   duplicating them — swapping the previous rule, which invalidly wrapped an
+   @keyframes block in a [dir="rtl"] selector and was dropped by the parser. */
+[dir="rtl"] .marquee-track{ animation-direction:reverse; }
 
 /* -------------------------------------------------------------------------
    10. SECTIONS COMMON
@@ -470,12 +505,31 @@ table.data-table{ border-radius:var(--radius-md); overflow:hidden; min-width:520
 .data-table th{ text-align:start; font-size:.78rem; text-transform:uppercase; letter-spacing:.05em; color:var(--text-faint); padding:14px 18px; background:var(--surface-2); }
 .data-table td{ padding:16px 18px; border-bottom:1px solid var(--border); font-size:.92rem; }
 .data-table tr:last-child td{ border-bottom:none; }
+.data-table tbody tr{ transition: background var(--dur-fast); }
+.data-table tbody tr:hover{ background:var(--surface-2); }
 
-.swatch{ border-radius:var(--radius-md); overflow:hidden; border:1px solid var(--border); }
-.swatch-top{ height:120px; position:relative; }
+.swatch{ border-radius:var(--radius-md); overflow:hidden; border:1px solid var(--border); transition: transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-med) var(--ease-out), border-color var(--dur-fast); }
+.swatch:hover{ transform:translateY(-6px); box-shadow:var(--shadow-lg); border-color:transparent; }
+.swatch-top{ height:120px; position:relative; transition: transform .5s var(--ease-out); }
+.swatch:hover .swatch-top{ transform:scale(1.06); }
 .swatch-body{ padding:18px 20px; background:var(--surface); }
 
-.testimonial-card{ background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); padding:32px; }
+/* Clear / Transparent swatch — a plain photo alone tends to read as an empty
+   box for this one material, so it gets a glassy diagonal sheen + a visible
+   dashed edge on top of the photo to make the "see-through" quality obvious
+   at a glance rather than looking broken. */
+.swatch-glass{ position:relative; border:2px dashed var(--teal); box-shadow: inset 0 0 0 1px rgba(255,255,255,.18); }
+.glass-sheen{ position:absolute; inset:0; pointer-events:none; background: linear-gradient(115deg, rgba(255,255,255,.65) 0%, rgba(255,255,255,.1) 28%, rgba(255,255,255,0) 44%, rgba(255,255,255,0) 58%, rgba(255,255,255,.4) 74%, rgba(255,255,255,.05) 100%); }
+[data-theme="dark"] .glass-sheen{ background: linear-gradient(115deg, rgba(255,255,255,.3) 0%, rgba(255,255,255,.05) 28%, rgba(255,255,255,0) 44%, rgba(255,255,255,0) 58%, rgba(255,255,255,.2) 74%, rgba(255,255,255,.02) 100%); }
+/* Watermark icon so the card still reads as intentional even in the rare
+   case the photo itself fails to load (slow connection, blocked host) —
+   the dashed teal border + this icon carry the "see-through finish" idea
+   on their own, independent of whether the photo behind them renders. */
+.glass-sheen .glass-ic{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:var(--teal); opacity:.4; }
+.glass-sheen .glass-ic svg{ width:34px; height:34px; }
+
+.testimonial-card{ background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); padding:32px; transition: transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-med) var(--ease-out), border-color var(--dur-fast); }
+.testimonial-card:hover{ transform:translateY(-4px); box-shadow:var(--shadow-md); border-color:transparent; }
 .testimonial-card .quote-mark{ font-family:var(--font-heading); font-size:3.4rem; line-height:1; color:var(--primary-100); }
 
 /* Forms */
@@ -533,8 +587,8 @@ table.data-table{ border-radius:var(--radius-md); overflow:hidden; min-width:520
 
 /* Blog */
 .blog-card{ background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); overflow:hidden; }
-.blog-thumb{ height:220px; position:relative; overflow:hidden; }
-.blog-thumb img{ width:100%; height:100%; object-fit:cover; transition: transform .6s var(--ease-out); }
+.blog-thumb{ height:220px; position:relative; overflow:hidden; background:var(--bg-alt); }
+.blog-thumb img{ width:100%; height:100%; object-fit:cover; transition: transform .6s var(--ease-out); display:block; color:transparent; font-size:0; }
 .blog-card:hover .blog-thumb img{ transform:scale(1.08); }
 .blog-cat{ position:absolute; top:16px; inset-inline-start:16px; background:rgba(255,255,255,.92); color:var(--primary); font-weight:700; font-size:.72rem; text-transform:uppercase; padding:6px 14px; border-radius:var(--radius-pill); }
 .blog-meta{ display:flex; align-items:center; gap:14px; font-size:.8rem; color:var(--text-faint); margin-block:10px 12px; }
@@ -588,3 +642,25 @@ table.data-table{ border-radius:var(--radius-md); overflow:hidden; min-width:520
 .page-loader.done{ opacity:0; visibility:hidden; }
 .loader-mark{ width:56px; height:56px; border-radius:16px; background:linear-gradient(135deg,var(--primary),var(--accent)); animation: loader-spin 1.1s var(--ease-spring) infinite; }
 @keyframes loader-spin{ 0%{ transform:rotate(0) scale(1);} 50%{ transform:rotate(180deg) scale(.8);} 100%{ transform:rotate(360deg) scale(1);} }
+
+/* -------------------------------------------------------------------------
+   TOAST NOTIFICATIONS (form submit feedback — Subscribe, Request a Quote,
+   Login/Register demo, Notify Me — anywhere main.js calls showToast()).
+------------------------------------------------------------------------- */
+.toast-stack{ position:fixed; top:calc(var(--header-h) + 16px); inset-inline-end:20px; z-index:999; display:flex; flex-direction:column; gap:12px; width:min(360px, calc(100vw - 40px)); pointer-events:none; }
+.toast{ position:relative; overflow:hidden; display:flex; align-items:flex-start; gap:14px; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-md); box-shadow:var(--shadow-xl); padding:16px 40px 16px 16px; pointer-events:auto; transform:translateX(24px) scale(.96); opacity:0; transition: transform .45s var(--ease-spring), opacity .35s var(--ease-out); }
+.toast.show{ transform:translateX(0) scale(1); opacity:1; }
+.toast.hide{ transform:translateX(24px) scale(.96); opacity:0; }
+.toast-icon{ flex-shrink:0; width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; background:var(--success); color:#fff; }
+.toast-icon svg{ width:19px; height:19px; }
+.toast-error .toast-icon{ background:var(--danger); }
+.toast-body{ display:flex; flex-direction:column; gap:3px; font-size:.86rem; padding-top:2px; }
+.toast-body strong{ font-size:.92rem; font-weight:800; }
+.toast-body span{ color:var(--text-muted); line-height:1.4; }
+.toast-close{ position:absolute; top:10px; inset-inline-end:10px; width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--text-faint); font-size:1.1rem; line-height:1; transition: background var(--dur-fast), color var(--dur-fast); }
+.toast-close:hover{ background:var(--surface-2); color:var(--text); }
+.toast-bar{ position:absolute; left:0; bottom:0; height:3px; background:var(--success); animation: toast-shrink linear forwards; animation-duration: var(--toast-duration, 4.2s); }
+.toast-error .toast-bar{ background:var(--danger); }
+@keyframes toast-shrink{ from{ width:100%; } to{ width:0%; } }
+@media (max-width:520px){ .toast-stack{ inset-inline:12px; top:auto; bottom:16px; width:auto; } .toast{ transform:translateY(24px) scale(.96); } .toast.show{ transform:translateY(0) scale(1); } .toast.hide{ transform:translateY(24px) scale(.96); } }
+@media (prefers-reduced-motion: reduce){ .toast{ transition: opacity .2s linear; transform:none !important; } }

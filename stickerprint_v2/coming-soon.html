@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
+<script>(function(){
+  try {
+    if (localStorage.getItem('stikko-theme') === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+  } catch (e) {}
+})();</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Coming Soon | Stikko</title>
@@ -9,7 +16,7 @@
 <meta property="og:title" content="Coming Soon | Stikko">
 <meta property="og:description" content="Stikko is undergoing scheduled maintenance — check back shortly.">
 <meta property="og:type" content="website">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%234B39EF'/%3E%3Cstop offset='1' stop-color='%23FF5A3C'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Cpath d='M40 0 L64 24 L64 0 Z' fill='white' fill-opacity='.35'/%3E%3Ctext x='32' y='42' font-size='30' font-family='Georgia,serif' font-weight='700' fill='white' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%234B39EF'/%3E%3Cstop offset='1' stop-color='%23FF5A3C'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Cg transform='translate(10,10) scale(1.833)' fill='white'%3E%3Cpath d='M15.4 3.7 L20.3 8.6 L15.4 8.6 Z' fill-opacity='.32'/%3E%3Cpath fill-rule='evenodd' d='M5.6 4H15.4L20.3 8.6V18.4C20.3 19.28 19.58 20 18.7 20H5.6C4.72 20 4 19.28 4 18.4V5.6C4 4.72 4.72 4 5.6 4Z M13.35 7.55C11.55 7.15 9.85 7.95 9.6 9.35C9.15 11.85 13.9 11.55 13.55 13.5C13.35 14.65 11.9 15.15 10.55 14.85C9.45 14.6 8.75 13.9 8.6 13.05L7.15 13.55C7.45 15.05 8.85 16.15 10.75 16.55C13.05 17.05 15.1 16.05 15.45 14.1C15.95 11.35 11.2 11.65 11.5 9.95C11.65 9.05 12.85 8.65 14 8.9C14.9 9.1 15.5 9.65 15.7 10.35L17.1 9.85C16.75 8.55 15.3 7.9 13.35 7.55Z'/%3E%3C/g%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -18,6 +25,14 @@
 
 </head>
 <body dir="ltr">
+<script>(function(){
+  try {
+    if (localStorage.getItem('stikko-dir') === 'rtl') {
+      document.body.setAttribute('dir', 'rtl');
+      document.documentElement.setAttribute('lang', 'ar');
+    }
+  } catch (e) {}
+})();</script>
 <div class="page-loader"><div class="loader-mark"></div></div>
 
 <section class="status-wrap" style="min-height:100vh;">
@@ -26,7 +41,7 @@
   <div class="dotgrid"></div>
   <div class="reveal in" style="max-width:640px;">
     <a href="index.html" class="brand" style="justify-content:center;margin-bottom:28px;">
-      <span class="brand-mark" style="width:42px;height:42px;"><span class="flip-inner"><span class="flip-face flip-front"><svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7.5 8.2c0-2.4 2.1-4.2 4.9-4.2s4.7 1.5 4.9 3.6" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M7.3 16.4c.2 2.1 2.2 3.6 4.9 3.6s4.9-1.8 4.9-4.2c0-4.1-9.8-3.7-9.8-7.9" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span><span class="flip-face flip-back">Sk</span></span></span> <span class="brand-word">Stikko</span>
+      <span class="brand-mark" style="width:42px;height:42px;"><span class="flip-inner"><span class="flip-face flip-front"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M15.4 3.7 L20.3 8.6 L15.4 8.6 Z" fill="currentColor" fill-opacity=".32"/><path fill="currentColor" fill-rule="evenodd" d="M5.6 4H15.4L20.3 8.6V18.4C20.3 19.28 19.58 20 18.7 20H5.6C4.72 20 4 19.28 4 18.4V5.6C4 4.72 4.72 4 5.6 4Z M13.35 7.55C11.55 7.15 9.85 7.95 9.6 9.35C9.15 11.85 13.9 11.55 13.55 13.5C13.35 14.65 11.9 15.15 10.55 14.85C9.45 14.6 8.75 13.9 8.6 13.05L7.15 13.55C7.45 15.05 8.85 16.15 10.75 16.55C13.05 17.05 15.1 16.05 15.45 14.1C15.95 11.35 11.2 11.65 11.5 9.95C11.65 9.05 12.85 8.65 14 8.9C14.9 9.1 15.5 9.65 15.7 10.35L17.1 9.85C16.75 8.55 15.3 7.9 13.35 7.55Z"/></svg></span><span class="flip-face flip-back">Sk</span></span></span> <span class="brand-word">Stikko</span>
     </a>
     <span class="eyebrow"><span class="dot"></span> Scheduled Maintenance</span>
     <h1 class="mt-md" style="font-size:clamp(2rem,4.5vw,3.2rem);">We&rsquo;re printing something new.</h1>
@@ -37,7 +52,8 @@
       <div class="countdown-box"><div class="n" data-m>00</div><div class="l">Minutes</div></div>
       <div class="countdown-box"><div class="n" data-s>00</div><div class="l">Seconds</div></div>
     </div>
-    <form class="flex-center gap-sm mt-md" style="flex-wrap:wrap;max-width:440px;margin-inline:auto;" data-demo-form>
+    <form class="flex-center gap-sm mt-md" style="flex-wrap:wrap;max-width:440px;margin-inline:auto;" data-demo-form
+          data-success-title="You&#8217;re on the list!" data-success-message="We&#8217;ll email you the moment we&#8217;re back online.">
       <input type="email" required placeholder="Notify me at..." style="flex:1;min-width:220px;padding:14px 18px;border-radius:999px;border:1.5px solid var(--border);background:var(--surface);">
       <button class="btn btn-primary" type="submit">Notify Me</button>
     </form>

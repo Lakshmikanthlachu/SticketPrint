@@ -15,11 +15,16 @@
     if (loader) setTimeout(function () { loader.classList.add("done"); }, 250);
   });
 
-  /* ---------- Theme toggle (session-memory; no persistence by design) ---------- */
+  /* ---------- Theme toggle (persisted across pages via localStorage —
+     the <head> inline script in layout.py reads this back before paint on
+     every subsequent page load, so navigating pages no longer drops back
+     to light mode). ---------- */
+  function storageSet(key, val) { try { localStorage.setItem(key, val); } catch (e) {} }
   var themeBtns = document.querySelectorAll("[data-theme-toggle]");
   function setTheme(mode) {
     if (mode === "dark") root.setAttribute("data-theme", "dark");
     else root.removeAttribute("data-theme");
+    storageSet("stikko-theme", mode);
   }
   themeBtns.forEach(function (btn) {
     btn.addEventListener("click", function () {
@@ -28,22 +33,83 @@
     });
   });
 
-  /* ---------- RTL toggle ---------- */
+  /* ---------- RTL toggle (persisted the same way; see BODY_DIR_INIT_SCRIPT
+     in layout.py for the matching read-back). The icon-mirror CSS keys off
+     the [dir="rtl"] ancestor selector directly, so no separate JS-managed
+     class is needed to keep the icon in sync with a persisted state. ---------- */
   var dirBtns = document.querySelectorAll("[data-dir-toggle]");
   dirBtns.forEach(function (btn) {
     btn.addEventListener("click", function () {
       var isRtl = document.body.getAttribute("dir") === "rtl";
-      document.body.setAttribute("dir", isRtl ? "ltr" : "rtl");
+      var next = isRtl ? "ltr" : "rtl";
+      document.body.setAttribute("dir", next);
       root.setAttribute("lang", isRtl ? "en" : "ar");
-      btn.classList.toggle("is-rtl", !isRtl);
+      storageSet("stikko-dir", next);
     });
   });
+
+  /* ---------- Toast notifications (form submit feedback) ---------- */
+  var TOAST_ICONS = {
+    success: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9"/></svg>',
+    error: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v6M12 16.8h.01"/></svg>'
+  };
+  function ensureToastStack() {
+    var stack = document.querySelector(".toast-stack");
+    if (!stack) {
+      stack = document.createElement("div");
+      stack.className = "toast-stack";
+      stack.setAttribute("aria-live", "polite");
+      document.body.appendChild(stack);
+    }
+    return stack;
+  }
+  function showToast(opts) {
+    opts = opts || {};
+    var type = opts.type === "error" ? "error" : "success";
+    var duration = opts.duration || 4200;
+    var stack = ensureToastStack();
+    var toast = document.createElement("div");
+    toast.className = "toast toast-" + type;
+    toast.style.setProperty("--toast-duration", (duration / 1000) + "s");
+    toast.innerHTML =
+      '<span class="toast-icon">' + (TOAST_ICONS[type] || "") + "</span>" +
+      '<span class="toast-body"><strong></strong><span></span></span>' +
+      '<button type="button" class="toast-close" aria-label="Dismiss notification">&times;</button>' +
+      '<span class="toast-bar"></span>';
+    toast.querySelector(".toast-body strong").textContent = opts.title || "";
+    toast.querySelector(".toast-body span").textContent = opts.message || "";
+    stack.appendChild(toast);
+    requestAnimationFrame(function () { toast.classList.add("show"); });
+    var timer = setTimeout(remove, duration);
+    function remove() {
+      clearTimeout(timer);
+      toast.classList.remove("show");
+      toast.classList.add("hide");
+      setTimeout(function () { toast.remove(); }, 350);
+    }
+    toast.querySelector(".toast-close").addEventListener("click", remove);
+  }
+  /* Exposed so admin-only dashboard.js (loaded after this file) can reuse
+     the same toast system for row actions / modal confirmations instead of
+     duplicating it. */
+  window.showToast = showToast;
 
   /* ---------- Mobile nav ---------- */
   var hamburger = document.querySelector(".hamburger");
   var mobileNav = document.querySelector(".mobile-nav");
+  var siteHeaderEl = document.querySelector(".site-header");
   if (hamburger && mobileNav) {
     hamburger.addEventListener("click", function () {
+      var opening = !mobileNav.classList.contains("open");
+      /* The announce bar above the sticky header isn't itself sticky, so the
+         combined header height at the top of the page differs from the
+         sticky header's own height once scrolled. Measure the header's
+         actual bottom edge each time the panel opens so it always sits
+         flush beneath both, instead of a fixed CSS offset that only
+         matched one scroll position. */
+      if (opening && siteHeaderEl) {
+        mobileNav.style.top = siteHeaderEl.getBoundingClientRect().bottom + "px";
+      }
       hamburger.classList.toggle("active");
       mobileNav.classList.toggle("open");
       document.body.style.overflow = mobileNav.classList.contains("open") ? "hidden" : "";
@@ -236,12 +302,88 @@
     if (authParams.get("tab") === "register") activateAuthTab(authTabsEl, "register");
   }
 
-  /* ---------- Generic dashboard-style tab-row ---------- */
+  /* ---------- Generic dashboard-style tab-row — always swaps the active
+     button; additionally filters a table's rows when the tab-row carries
+     data-filter-scope (admin Orders status tabs, Users role/status tabs).
+     A plain tab-row with no scope (e.g. the dashboard's Week/Month/Year
+     chart tabs) just gets the active-state swap, unchanged. ---------- */
   document.querySelectorAll(".tab-row").forEach(function (tabs) {
+    var scopeSel = tabs.getAttribute("data-filter-scope");
+    var table = scopeSel ? document.querySelector(scopeSel) : null;
     var btns = tabs.querySelectorAll("button");
     btns.forEach(function (btn) {
-      btn.addEventListener("click", function () { btns.forEach(function (b) { b.classList.remove("active"); }); btn.classList.add("active"); });
+      btn.addEventListener("click", function () {
+        btns.forEach(function (b) { b.classList.remove("active"); });
+        btn.classList.add("active");
+        if (!table) return;
+        var filter = btn.getAttribute("data-filter") || "all";
+        // If the table is paginated, only rows on the page currently on
+        // screen participate — switching a status tab shouldn't reveal rows
+        // that belong to a different page.
+        var pager = table.closest(".panel") && table.closest(".panel").querySelector("[data-pagination]");
+        var currentPage = pager ? (parseInt(pager.getAttribute("data-current-page"), 10) || 1) : null;
+        table.querySelectorAll("tbody tr").forEach(function (row) {
+          var page = row.getAttribute("data-page");
+          var inScope = !page || !pager || parseInt(page, 10) === currentPage;
+          var matches = filter === "all" || row.getAttribute("data-status") === filter || row.getAttribute("data-group") === filter;
+          row.style.display = (inScope && matches) ? "" : "none";
+        });
+      });
     });
+  });
+
+  /* ---------- Table pagination (admin Orders) ---------- */
+  document.querySelectorAll("[data-pagination]").forEach(function (pager) {
+    var panel = pager.closest(".panel");
+    var table = panel ? panel.querySelector(".data-table") : null;
+    if (!table) return;
+    var rows = table.querySelectorAll("tbody tr");
+    var pageBtns = pager.querySelectorAll("[data-page-btn]");
+    var prevBtn = pager.querySelector("[data-page-prev]");
+    var nextBtn = pager.querySelector("[data-page-next]");
+    var info = pager.querySelector("[data-page-info]");
+    var pageSize = parseInt(pager.getAttribute("data-page-size"), 10) || 10;
+    var total = parseInt(pager.getAttribute("data-total"), 10) || rows.length;
+    var totalPages = pageBtns.length || 1;
+    var filterTabs = panel.querySelector(".tab-row[data-filter-scope]");
+
+    function goTo(pageNum) {
+      pageNum = Math.max(1, Math.min(totalPages, pageNum));
+      pager.setAttribute("data-current-page", pageNum);
+      rows.forEach(function (row) {
+        var rowPage = parseInt(row.getAttribute("data-page"), 10) || 1;
+        row.style.display = (rowPage === pageNum) ? "" : "none";
+      });
+      pageBtns.forEach(function (b) {
+        var isActive = parseInt(b.getAttribute("data-page-btn"), 10) === pageNum;
+        b.classList.toggle("btn-primary", isActive);
+        b.classList.toggle("btn-ghost", !isActive);
+      });
+      if (prevBtn) prevBtn.disabled = pageNum === 1;
+      if (nextBtn) nextBtn.disabled = pageNum === totalPages;
+      if (info) {
+        var start = (pageNum - 1) * pageSize + 1;
+        var end = Math.min(pageNum * pageSize, total);
+        info.textContent = "Showing " + start + "–" + end + " of " + total + " orders";
+      }
+      // A status filter from a different page no longer applies once the
+      // page changes — reset it to "All" so the new page's rows all show.
+      if (filterTabs) {
+        filterTabs.querySelectorAll("button").forEach(function (b) { b.classList.remove("active"); });
+        var allBtn = filterTabs.querySelector('[data-filter="all"]');
+        if (allBtn) allBtn.classList.add("active");
+      }
+    }
+    pageBtns.forEach(function (b) {
+      b.addEventListener("click", function () { goTo(parseInt(b.getAttribute("data-page-btn"), 10)); });
+    });
+    if (prevBtn) prevBtn.addEventListener("click", function () {
+      goTo((parseInt(pager.getAttribute("data-current-page"), 10) || 1) - 1);
+    });
+    if (nextBtn) nextBtn.addEventListener("click", function () {
+      goTo((parseInt(pager.getAttribute("data-current-page"), 10) || 1) + 1);
+    });
+    pager.setAttribute("data-current-page", "1");
   });
 
   /* ---------- Countdown (coming soon) ---------- */
@@ -298,9 +440,21 @@
       e.preventDefault();
       var note = form.querySelector("[data-form-note]");
       var valid = form.checkValidity();
+      var successText = "Thanks! Your request has been received — this is a template demo, no data is sent.";
+      var invalidText = "Please fill in all required fields correctly.";
       if (note) {
-        note.textContent = valid ? "Thanks! Your request has been received — this is a template demo, no data is sent." : "Please fill in all required fields correctly.";
+        note.textContent = valid ? successText : invalidText;
         note.style.color = valid ? "var(--success)" : "var(--danger)";
+      }
+      if (valid) {
+        showToast({
+          type: "success",
+          title: form.getAttribute("data-success-title") || "Success!",
+          message: form.getAttribute("data-success-message") || successText
+        });
+        form.reset();
+      } else {
+        showToast({ type: "error", title: "Almost there", message: invalidText });
       }
     });
   });
