@@ -193,7 +193,7 @@ p{ color:var(--text-muted); }
 .btn-outline:hover{ border-color:var(--primary); color:var(--primary); background:var(--primary-50); }
 .btn-ghost{ background: var(--surface-2); color:var(--text); }
 .btn-ghost:hover{ background: var(--border); }
-.btn-white{ background:#fff; color:var(--primary-700); box-shadow: var(--shadow-md); }
+.btn-white{ background:#fff; color:#2E1FB0; box-shadow: var(--shadow-md); }
 .btn-white:hover{ transform: translateY(-3px); }
 .btn-sm{ padding:10px 20px; font-size:.85rem; }
 .btn-lg{ padding:19px 38px; font-size:1.05rem; }
@@ -201,6 +201,25 @@ p{ color:var(--text-muted); }
 .btn-icon{ padding:12px; border-radius:50%; }
 .btn:disabled{ opacity:.45; cursor:not-allowed; pointer-events:none; transform:none !important; box-shadow:none !important; }
 .btn:disabled::before{ display:none; }
+/* Buttons with long labels (e.g. "Request Enterprise Quote") were forced
+   onto one un-wrapping line at phone widths and could push the page into
+   horizontal scroll when the surrounding container's padding left little
+   room. Letting the label wrap keeps the button — and the page — inside
+   the viewport instead of overflowing it. */
+@media (max-width:480px){
+  .btn{ white-space:normal; text-align:center; line-height:1.25; }
+  .btn-lg{ padding:16px 26px; font-size:.98rem; }
+}
+
+/* Large promotional "banner" cards (final CTAs, enterprise/product promos,
+   the newsletter card) used a fixed, generous padding that looked right on
+   desktop but left very little width for their own content on phones —
+   the direct cause of the Request Enterprise Quote button overflowing at
+   320-375px. Padding now scales down at the same breakpoints as everything
+   else instead of staying fixed. */
+.cta-banner{ padding:56px; }
+@media (max-width:640px){ .cta-banner{ padding:36px 28px; } }
+@media (max-width:400px){ .cta-banner{ padding:28px 18px; } }
 
 /* -------------------------------------------------------------------------
    5. HEADER / NAVIGATION
@@ -239,6 +258,12 @@ p{ color:var(--text-muted); }
    comes only from the panel's own padding, not from a position offset. */
 .mega-panel{ position:absolute; top:100%; left:50%; transform: translateX(-50%) translateY(8px); width:640px; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); box-shadow: var(--shadow-xl); padding:28px 24px 24px; display:grid; grid-template-columns:1.1fr .9fr; gap:8px; opacity:0; visibility:hidden; pointer-events:none; transition: opacity var(--dur-med) var(--ease-out), transform var(--dur-med) var(--ease-out); }
 .main-nav > li:hover .mega-panel, .main-nav > li:focus-within .mega-panel{ opacity:1; visibility:visible; pointer-events:auto; transform: translateX(-50%) translateY(0); }
+/* The first nav item ("Home") sits near the left edge of the screen — a
+   center-anchored (left:50%) panel this wide gets pushed into negative
+   viewport coordinates and appears clipped against the browser edge.
+   Anchor it to the item's own left edge instead. */
+.main-nav > li:first-child .mega-panel{ left:0; transform:translateY(8px); }
+.main-nav > li:first-child:hover .mega-panel, .main-nav > li:first-child:focus-within .mega-panel{ transform:translateY(0); }
 .mega-col-title{ font-size:.75rem; text-transform:uppercase; letter-spacing:.08em; color:var(--text-faint); font-weight:700; margin-bottom:10px; padding-inline:12px; }
 .mega-link{ display:flex; align-items:center; gap:12px; padding:10px 12px; border-radius:var(--radius-sm); transition: background var(--dur-fast); }
 .mega-link:hover{ background:var(--surface-2); }
@@ -247,6 +272,7 @@ p{ color:var(--text-muted); }
 .mega-link strong{ display:block; font-size:.88rem; }
 .mega-link span{ font-size:.78rem; color:var(--text-muted); }
 .mega-promo{ border-radius:var(--radius-md); background:linear-gradient(155deg,var(--primary-100),var(--accent-100)); padding:20px; display:flex; flex-direction:column; justify-content:center; gap:8px; }
+.mega-promo .badge{ align-self:flex-start; }
 .mega-promo strong{ font-size:.95rem; }
 .mega-promo p{ font-size:.8rem; margin:0; }
 
@@ -296,6 +322,21 @@ p{ color:var(--text-muted); }
 .mobile-nav a .nav-ic{ width:36px; height:36px; border-radius:10px; background:var(--primary-100); color:var(--primary); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
 .mobile-nav a .nav-ic svg{ width:17px; height:17px; }
 .mobile-nav a > svg{ width:15px; height:15px; color:var(--text-faint); flex-shrink:0; }
+/* Accordion rows for nav items with sub-links ("Home", "Products") — a plain
+   link here could only ever point at one sub-page, so the others (e.g.
+   Home — Enterprise & Bulk) were unreachable from the mobile menu. */
+.mobile-nav-group{ border-bottom:1px solid var(--border); }
+.mobile-nav-toggle{ width:100%; display:flex; align-items:center; justify-content:space-between; gap:12px; padding:14px 6px; font-weight:600; font-size:1.02rem; color:var(--text); background:none; border:0; text-align:start; font-family:inherit; }
+.mobile-nav-toggle:hover, .mobile-nav-toggle:active{ color:var(--primary); }
+.mobile-nav-toggle .nav-link-main{ display:flex; align-items:center; gap:14px; min-width:0; }
+.mobile-nav-toggle .nav-ic{ width:36px; height:36px; border-radius:10px; background:var(--primary-100); color:var(--primary); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.mobile-nav-toggle .nav-ic svg{ width:17px; height:17px; }
+.mobile-nav-toggle > svg{ width:15px; height:15px; color:var(--text-faint); flex-shrink:0; transition: transform var(--dur-fast) var(--ease-out); }
+.mobile-nav-group.open .mobile-nav-toggle > svg{ transform:rotate(90deg); }
+.mobile-nav-sub{ max-height:0; overflow:hidden; transition: max-height var(--dur-med) var(--ease-out); padding-inline-start:14px; }
+.mobile-nav-group.open .mobile-nav-sub{ max-height:240px; }
+.mobile-nav-sub-link{ display:block; padding:11px 6px 11px 40px; font-size:.92rem; color:var(--text-muted); border-top:1px solid var(--border); }
+.mobile-nav-sub-link:hover, .mobile-nav-sub-link:active{ color:var(--primary); }
 .mobile-nav-auth{ display:flex; flex-direction:column; gap:10px; margin-top:22px; }
 .mobile-nav-auth .btn{ margin-top:0; }
 
@@ -366,6 +407,21 @@ p{ color:var(--text-muted); }
 ------------------------------------------------------------------------- */
 .card{ background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); padding:32px; transition: transform var(--dur-med) var(--ease-out), box-shadow var(--dur-med) var(--ease-out), border-color var(--dur-med); }
 .card-hover:hover{ transform: translateY(-8px); box-shadow: var(--shadow-lg); border-color: transparent; }
+/* Keep title rows the same height across a grid of cards so 1-line and
+   2-line titles don't push paragraphs onto different baselines. */
+.card h3{ min-height:2.3em; }
+
+/* "Trusted across industries" cards (home-enterprise.html) — a photo tile
+   with the category icon centered on top of it, replacing the earlier bare,
+   unaligned SVG glyph. .industry-title has no paragraph below it, so it
+   doesn't need the grid-alignment min-height every other card title gets. */
+.industry-photo{ height:120px; border-radius:var(--radius-md); overflow:hidden; position:relative; display:flex; align-items:center; justify-content:center; transition: transform .5s var(--ease-out); }
+.industry-photo::after{ content:''; position:absolute; inset:0; background:linear-gradient(180deg, rgba(10,8,20,0) 55%, rgba(10,8,20,.55) 100%); }
+.card:hover .industry-photo{ transform:scale(1.05); }
+.industry-ic{ position:relative; z-index:1; width:52px; height:52px; border-radius:14px; background:rgba(255,255,255,.94); color:var(--primary); display:flex; align-items:center; justify-content:center; box-shadow:var(--shadow-md); transition: transform var(--dur-med) var(--ease-spring); }
+.industry-ic svg{ width:24px; height:24px; }
+.card:hover .industry-ic{ transform: scale(1.1) rotate(-6deg); }
+.industry-title{ min-height:0; }
 
 /* Mouse-tracked 3D tilt cards (paired with .tilt-wrap's perspective + JS rotateX/rotateY) */
 .card-3d{ transition: box-shadow var(--dur-med) var(--ease-out), border-color var(--dur-med); box-shadow:var(--shadow-sm); }
@@ -449,10 +505,10 @@ p{ color:var(--text-muted); }
 .process-line::before{ content:''; position:absolute; top:34px; left:8%; right:8%; height:2px; background:repeating-linear-gradient(90deg,var(--border-strong) 0 10px, transparent 10px 20px); z-index:0; }
 [dir="rtl"] .process-line::before{ }
 .process-step{ position:relative; z-index:1; text-align:center; }
-.process-num{ width:68px; height:68px; margin-inline:auto 16px; border-radius:50%; background:var(--surface); border:2px solid var(--border-strong); display:flex; align-items:center; justify-content:center; font-family:var(--font-heading); font-weight:800; font-size:1.3rem; color:var(--primary); box-shadow:var(--shadow-md); }
+.process-num{ width:68px; height:68px; margin-inline:auto; margin-block-end:16px; border-radius:50%; background:var(--surface); border:2px solid var(--border-strong); display:flex; align-items:center; justify-content:center; font-family:var(--font-heading); font-weight:800; font-size:1.3rem; color:var(--primary); box-shadow:var(--shadow-md); }
 
 /* Process node — icon-in-ring variant with a numbered notch, used on Home 1 */
-.process-node{ width:78px; height:78px; margin-inline:auto 18px; border-radius:50%; background:linear-gradient(135deg,var(--primary),var(--accent)); display:flex; align-items:center; justify-content:center; position:relative; box-shadow:var(--shadow-glow-primary); transition: transform var(--dur-med) var(--ease-spring); }
+.process-node{ width:78px; height:78px; margin-inline:auto; margin-block-end:18px; border-radius:50%; background:linear-gradient(135deg,var(--primary),var(--accent)); display:flex; align-items:center; justify-content:center; position:relative; box-shadow:var(--shadow-glow-primary); transition: transform var(--dur-med) var(--ease-spring); }
 .process-step:hover .process-node{ transform: scale(1.08) rotate(-4deg); }
 .process-node svg{ width:30px; height:30px; color:#fff; }
 .process-node::after{ content:attr(data-step); position:absolute; bottom:-4px; inset-inline-end:-4px; width:28px; height:28px; border-radius:50%; background:#fff; color:var(--primary-600); display:flex; align-items:center; justify-content:center; font-size:.74rem; font-weight:800; font-family:var(--font-heading); box-shadow:0 0 0 3px rgba(255,255,255,.18); }
@@ -464,7 +520,7 @@ p{ color:var(--text-muted); }
 .stat-ribbon-grid{ position:relative; display:grid; grid-template-columns:repeat(4,1fr); gap:0; }
 .stat-ribbon-item{ text-align:center; padding:0 18px; border-inline-end:1px solid rgba(255,255,255,.14); }
 .stat-ribbon-item:last-child{ border-inline-end:none; }
-.stat-ribbon-item .ric{ width:46px; height:46px; border-radius:12px; background:rgba(255,255,255,.12); display:flex; align-items:center; justify-content:center; margin-inline:auto 14px; color:#fff; }
+.stat-ribbon-item .ric{ width:46px; height:46px; border-radius:12px; background:rgba(255,255,255,.12); display:flex; align-items:center; justify-content:center; margin-inline:auto; margin-block-end:14px; color:#fff; }
 .stat-ribbon-item .ric svg{ width:22px; height:22px; }
 .stat-ribbon-item .num{ color:#fff; }
 .stat-ribbon-item p{ color:rgba(255,255,255,.65); font-size:.85rem; margin-top:4px; }
@@ -508,11 +564,22 @@ table.data-table{ border-radius:var(--radius-md); overflow:hidden; min-width:520
 .data-table tbody tr{ transition: background var(--dur-fast); }
 .data-table tbody tr:hover{ background:var(--surface-2); }
 
-.swatch{ border-radius:var(--radius-md); overflow:hidden; border:1px solid var(--border); transition: transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-med) var(--ease-out), border-color var(--dur-fast); }
+/* .grid's default align-items:stretch makes every .swatch in a row match
+   the height of the tallest one (e.g. Clear / Transparent's longer
+   description). Without display:flex here, that extra height landed below
+   .swatch-body's content as unstyled empty space — showing the page's own
+   dark background through it, which read as a stray black block at the
+   bottom of shorter cards (e.g. Kraft Paper). flex-direction:column plus
+   .swatch-body's flex:1 below makes the panel color fill that space instead. */
+.swatch{ display:flex; flex-direction:column; border-radius:var(--radius-md); overflow:hidden; border:1px solid var(--border); transition: transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-med) var(--ease-out), border-color var(--dur-fast); }
 .swatch:hover{ transform:translateY(-6px); box-shadow:var(--shadow-lg); border-color:transparent; }
-.swatch-top{ height:120px; position:relative; transition: transform .5s var(--ease-out); }
+.swatch-top{ height:120px; flex-shrink:0; position:relative; transition: transform .5s var(--ease-out); }
 .swatch:hover .swatch-top{ transform:scale(1.06); }
-.swatch-body{ padding:18px 20px; background:var(--surface); }
+/* A flat panel dropped directly under a busy photo with no divider read as
+   a stray solid-color block (most visible in dark mode, where --surface is
+   close to black) rather than an intentional card footer. A hairline top
+   border and a touch more lift (--surface-2) make the seam look designed. */
+.swatch-body{ flex:1; padding:18px 20px; background:var(--surface-2); border-top:1px solid var(--border); }
 
 /* Clear / Transparent swatch — a plain photo alone tends to read as an empty
    box for this one material, so it gets a glassy diagonal sheen + a visible
@@ -580,6 +647,13 @@ table.data-table{ border-radius:var(--radius-md); overflow:hidden; min-width:520
 
 /* Page hero (inner pages) */
 .page-hero{ padding-block: 64px 56px; position:relative; overflow:hidden; }
+/* Split hero variant: balances the hero text with a photo on the right so
+   wide screens don't show a wall of empty space beside a short title. */
+.page-hero-split-grid{ display:grid; grid-template-columns:1.15fr .85fr; gap:48px; align-items:center; }
+.page-hero-text{ min-width:0; }
+.page-hero-text h1{ max-width:none; }
+.page-hero-media{ aspect-ratio:4/3; border-radius:var(--radius-lg); background-color:var(--bg-alt); box-shadow:var(--shadow-lg); }
+@media (max-width:900px){ .page-hero-split-grid{ grid-template-columns:1fr; } .page-hero-media{ display:none; } }
 .breadcrumb{ display:flex; align-items:center; gap:8px; font-size:.88rem; color:var(--text-muted); margin-bottom:18px; }
 .breadcrumb svg{ width:14px; height:14px; }
 [dir="rtl"] .breadcrumb svg{ transform:scaleX(-1); }

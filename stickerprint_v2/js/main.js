@@ -121,6 +121,27 @@
         document.body.style.overflow = "";
       });
     });
+
+    /* Accordion toggles for nav items with sub-links (e.g. "Home", which
+       expands to Home — General Landing / Home — Enterprise & Bulk). A
+       toggle button (not a link) so it expands in place instead of
+       navigating and closing the whole mobile menu. */
+    mobileNav.querySelectorAll(".mobile-nav-toggle").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var group = btn.closest(".mobile-nav-group");
+        if (!group) return;
+        var opening = !group.classList.contains("open");
+        mobileNav.querySelectorAll(".mobile-nav-group.open").forEach(function (g) {
+          if (g !== group) {
+            g.classList.remove("open");
+            var t = g.querySelector(".mobile-nav-toggle");
+            if (t) t.setAttribute("aria-expanded", "false");
+          }
+        });
+        group.classList.toggle("open", opening);
+        btn.setAttribute("aria-expanded", opening ? "true" : "false");
+      });
+    });
   }
 
   /* ---------- Admin sidebar toggle (mobile) ---------- */
