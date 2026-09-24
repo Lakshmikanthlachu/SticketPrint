@@ -304,10 +304,10 @@ p{ color:var(--text-muted); }
 /* Full-screen mobile nav panel — utility icons row, then a scrollable link
    list (each with a leading icon so it doesn't read as bare text), then the
    auth buttons pinned at the bottom. */
-.mobile-nav{ position:fixed; top:var(--header-h); right:0; bottom:0; left:0; background:var(--bg); z-index:190; padding:20px 20px 28px; overflow-y:auto; transform:translateY(-12px); opacity:0; visibility:hidden; transition: transform var(--dur-med) var(--ease-out), opacity var(--dur-med) var(--ease-out), visibility var(--dur-med); display:flex; flex-direction:column; }
+.mobile-nav{ position:fixed; top:var(--header-h); right:0; bottom:0; left:0; background:var(--bg); z-index:190; padding:20px 20px 0; overflow:hidden; transform:translateY(-12px); opacity:0; visibility:hidden; transition: transform var(--dur-med) var(--ease-out), opacity var(--dur-med) var(--ease-out), visibility var(--dur-med); display:flex; flex-direction:column; }
 .mobile-nav.open{ transform:translateY(0); opacity:1; visibility:visible; }
 
-.mobile-nav-utils{ display:flex; gap:10px; padding-bottom:18px; margin-bottom:14px; border-bottom:1px solid var(--border); }
+.mobile-nav-utils{ flex-shrink:0; display:flex; gap:10px; padding-bottom:18px; margin-bottom:14px; border-bottom:1px solid var(--border); }
 .mobile-util-btn{ flex:1; display:flex; align-items:center; justify-content:center; gap:8px; padding:13px 8px; border-radius:var(--radius-md); background:var(--surface-2); font-size:.82rem; font-weight:700; color:var(--text-muted); transition: background var(--dur-fast), color var(--dur-fast); }
 .mobile-util-btn svg{ width:18px; height:18px; flex-shrink:0; }
 .mobile-util-btn:hover, .mobile-util-btn:active{ background:var(--primary-100); color:var(--primary); }
@@ -315,7 +315,7 @@ p{ color:var(--text-muted); }
 [data-theme="dark"] .mobile-util-btn .moon{ display:none; }
 [data-theme="dark"] .mobile-util-btn .sun{ display:block; }
 
-.mobile-nav-links{ display:flex; flex-direction:column; }
+.mobile-nav-links{ flex:1 1 auto; min-height:0; overflow-y:auto; -webkit-overflow-scrolling:touch; display:flex; flex-direction:column; }
 .mobile-nav a{ display:flex; align-items:center; justify-content:space-between; gap:12px; padding:14px 6px; font-weight:600; font-size:1.02rem; border-bottom:1px solid var(--border); color:var(--text); transition: color var(--dur-fast); }
 .mobile-nav a:hover, .mobile-nav a:active{ color:var(--primary); }
 .mobile-nav a .nav-link-main{ display:flex; align-items:center; gap:14px; min-width:0; }
@@ -337,8 +337,8 @@ p{ color:var(--text-muted); }
 .mobile-nav-group.open .mobile-nav-sub{ max-height:240px; }
 .mobile-nav-sub-link{ display:block; padding:11px 6px 11px 40px; font-size:.92rem; color:var(--text-muted); border-top:1px solid var(--border); }
 .mobile-nav-sub-link:hover, .mobile-nav-sub-link:active{ color:var(--primary); }
-.mobile-nav-auth{ display:flex; flex-direction:column; align-items:center; gap:10px; margin-top:22px; }
-.mobile-nav-auth .btn{ margin-top:0; min-width:200px; }
+.mobile-nav-auth{ flex-shrink:0; display:flex; flex-direction:column; align-items:center; gap:10px; padding-block:18px 22px; border-top:1px solid var(--border); background:var(--bg); }
+.mobile-nav-auth .btn{ justify-content:center; margin-top:0; padding:15px 30px; border-bottom:none; min-width:200px; }
 
 /* -------------------------------------------------------------------------
    6. HERO / BACKDROP FX
